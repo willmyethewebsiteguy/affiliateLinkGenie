@@ -6,9 +6,9 @@
 
 (function(){
 
-  function initGenie() {
-    let sponsoredLinks = document.querySelectorAll('[href*="#rel=sponsored"]'),
-        noFollowLinks = document.querySelectorAll('[href*="#rel=nofollow"]');
+  function initGenie(container = document) {
+    let sponsoredLinks = container.querySelectorAll('[href*="#rel=sponsored"]'),
+        noFollowLinks = container.querySelectorAll('[href*="#rel=nofollow"]');
         
     for (let el of sponsoredLinks) {
       let href = el.getAttribute('href');
@@ -32,24 +32,9 @@
   function manipulateString(str) {
     const container = document.createElement('div');
     container.innerHTML = str;
-  
-    let sponsoredLinks = container.querySelectorAll('[href*="#rel=sponsored"]'),
-        noFollowLinks = container.querySelectorAll('[href*="#rel=nofollow"]');
-        
-    for (let el of sponsoredLinks) {
-      let href = el.getAttribute('href');
-      
-      el.href = href.replace('#rel=sponsored', '');
-      el.setAttribute('rel', 'sponsored');
-    }
-    
-    for (let el of noFollowLinks) {
-      let href = el.getAttribute('href');
-      
-      el.href = href.replace('#rel=nofollow', '');
-      el.setAttribute('rel', 'nofollow');
-    } 
-  
+
+    initGenie(container);
+
     const modifiedString = container.innerHTML;
     return modifiedString;
   }
