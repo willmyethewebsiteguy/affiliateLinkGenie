@@ -7,25 +7,37 @@
 (function(){
 
   function initGenie(container = document) {
-    let sponsoredLinks = container.querySelectorAll('[href*="#rel=sponsored"]'),
-        noFollowLinks = container.querySelectorAll('[href*="#rel=nofollow"]');
-        
-    for (let el of sponsoredLinks) {
-      let href = el.getAttribute('href');
-      
-      el.href = href.replace('#rel=sponsored', '');
-      el.setAttribute('rel', 'sponsored');
-    }
+    const links = container.querySelectorAll('a[href*="#rel="]'); 
     
-    for (let el of noFollowLinks) {
+    for (let el of links) {
       let href = el.getAttribute('href');
-      
-      el.href = href.replace('#rel=nofollow', '');
-      el.setAttribute('rel', 'nofollow');
-    } 
+      let newRel = [];
+  
+      // Check and handle sponsored
+      if (href.includes('#rel=sponsored')) {
+        href = href.replace('#rel=sponsored', '');
+        newRel.push('sponsored');
+      }
+  
+      // Check and handle nofollow
+      if (href.includes('#rel=nofollow')) {
+        href = href.replace('#rel=nofollow', '');
+        newRel.push('nofollow');
+      }
+  
+      // Set the cleaned href back to the element
+      el.href = href;
+  
+      // Set the new rel if there were any changes
+      if (newRel.length > 0) {
+        el.setAttribute('rel', newRel.join(' '));
+      }
+    }
   }
-
+  
   initGenie();
+
+  window.wmAffiliateGenie = initGenie;
 
   /*For Gallery Lightboxes*/
   let lightboxes = document.querySelectorAll('.js-gallery-lightbox-opener');
